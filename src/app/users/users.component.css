@@ -1,0 +1,15 @@
+.user-session {
+  min-height: 100vh;
+}
+.loader-session {
+  min-height: 100vh;
+  min-width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.form-control:disabled,
+.form-control[readonly] {
+  border: none;
+  background: transparent;
+}

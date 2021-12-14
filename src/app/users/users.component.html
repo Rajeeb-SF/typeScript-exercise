@@ -1,0 +1,155 @@
+<div class="container-fluid user-session w-100 bg-red">
+  <div *ngIf="!users.length" class="loader-session">
+    <button class="btn btn-primary" (click)="loadData()" *ngIf="!loading">
+      Load data
+    </button>
+    <app-loader *ngIf="loading"></app-loader>
+  </div>
+  <div class="col-md-12" *ngIf="users.length">
+    <header class="col-md-12 my-4">
+      <button class="btn btn-primary" (click)="loadData()">Refresh Data</button>
+    </header>
+    <div class="col-md-12">
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">First Name</th>
+              <th scope="col">Middle Name</th>
+              <th scope="col">Last Name</th>
+              <th scope="col">Email</th>
+              <th scope="col">Role</th>
+              <th scope="col">Phone Number</th>
+              <th scope="col">Address</th>
+              <th scope="col">Created On</th>
+              <th scope="col">Updated On</th>
+              <th scope="col">Edit</th>
+              <th scope="col">Delete</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let user of users; index as i">
+              <th scope="row">{{ i + 1 }}</th>
+              <td>
+                <input
+                  type="text"
+                  placeholder="Enter First Name"
+                  class="form-control"
+                  [(ngModel)]="formValues[i].firstName"
+                  [disabled]="!user.isEdit"
+                />
+              </td>
+              <td>
+                <input
+                  type="text"
+                  placeholder="Enter First Name"
+                  class="form-control"
+                  [(ngModel)]="user.middleName"
+                  [disabled]="!user.isEdit"
+                />
+              </td>
+              <td>
+                <input
+                  type="text"
+                  placeholder="Enter First Name"
+                  class="form-control"
+                  [(ngModel)]="user.lastName"
+                  [disabled]="!user.isEdit"
+                />
+              </td>
+              <td>
+                <input
+                  type="email"
+                  placeholder="Enter First Name"
+                  class="form-control"
+                  [(ngModel)]="user.email"
+                  [disabled]="!user.isEdit"
+                />
+              </td>
+              <td>
+                <select class="form-control">
+                  <option *ngFor="let userType of userTypes" [value]="userType">
+                    {{ usertypeToLabelMapping[userType] }}
+                  </option>
+                </select>
+              </td>
+              <td>
+                <input
+                  type="tel"
+                  placeholder="Enter First Name"
+                  class="form-control"
+                  [(ngModel)]="user.phoneNumber"
+                  [disabled]="!user.isEdit"
+                />
+              </td>
+              <td>
+                <input
+                  type="text"
+                  placeholder="Enter First Name"
+                  class="form-control"
+                  [(ngModel)]="user.address"
+                  [disabled]="!user.isEdit"
+                />
+              </td>
+              <td>
+                <input
+                  type="date"
+                  placeholder="Enter First Name"
+                  class="form-control"
+                  [(ngModel)]="user.createdAt"
+                  [disabled]="!user.isEdit"
+                />
+              </td>
+              <td>
+                <input
+                  type="date"
+                  placeholder="Enter First Name"
+                  class="form-control"
+                  [(ngModel)]="user.updatedAt"
+                  [disabled]="!user.isEdit"
+                />
+              </td>
+              <td>
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  (click)="toggleEdit(i)"
+                >
+                  <fa-icon
+                    *ngIf="!user.isEdit"
+                    [icon]="faEdit"
+                    title="Edit"
+                  ></fa-icon>
+                  <fa-icon
+                    *ngIf="user.isEdit"
+                    [icon]="faTimes"
+                    title="Cancel"
+                  ></fa-icon>
+                </button>
+              </td>
+              <td>
+                <button
+                  class="btn btn-danger"
+                  (click)="removeUser(i)"
+                  *ngIf="!user.isEdit"
+                  title="Delete"
+                >
+                  <fa-icon [icon]="faTrash"></fa-icon>
+                </button>
+                <button
+                  class="btn btn-success"
+                  *ngIf="user.isEdit"
+                  title="Save"
+                  (click)="toggleEdit(i)"
+                >
+                  <fa-icon [icon]="faSave"></fa-icon>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
