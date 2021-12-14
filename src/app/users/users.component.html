@@ -43,7 +43,7 @@
               <td>
                 <input
                   type="text"
-                  placeholder="Enter First Name"
+                  placeholder="Enter Middle Name"
                   class="form-control"
                   [(ngModel)]="user.middleName"
                   [disabled]="!user.isEdit"
@@ -52,7 +52,7 @@
               <td>
                 <input
                   type="text"
-                  placeholder="Enter First Name"
+                  placeholder="Enter Last Name"
                   class="form-control"
                   [(ngModel)]="user.lastName"
                   [disabled]="!user.isEdit"
@@ -61,14 +61,17 @@
               <td>
                 <input
                   type="email"
-                  placeholder="Enter First Name"
+                  placeholder="Enter Email Address"
                   class="form-control"
                   [(ngModel)]="user.email"
                   [disabled]="!user.isEdit"
                 />
               </td>
               <td>
-                <select class="form-control">
+                <select
+                  class="form-control select-box"
+                  [disabled]="!user.isEdit"
+                >
                   <option *ngFor="let userType of userTypes" [value]="userType">
                     {{ usertypeToLabelMapping[userType] }}
                   </option>
@@ -77,7 +80,7 @@
               <td>
                 <input
                   type="tel"
-                  placeholder="Enter First Name"
+                  placeholder="Enter Phone Number"
                   class="form-control"
                   [(ngModel)]="user.phoneNumber"
                   [disabled]="!user.isEdit"
@@ -86,7 +89,7 @@
               <td>
                 <input
                   type="text"
-                  placeholder="Enter First Name"
+                  placeholder="Enter Address"
                   class="form-control"
                   [(ngModel)]="user.address"
                   [disabled]="!user.isEdit"
@@ -95,7 +98,7 @@
               <td>
                 <input
                   type="date"
-                  placeholder="Enter First Name"
+                  placeholder="YYYY-MM-DD"
                   class="form-control"
                   [(ngModel)]="user.createdAt"
                   [disabled]="!user.isEdit"
@@ -104,7 +107,7 @@
               <td>
                 <input
                   type="date"
-                  placeholder="Enter First Name"
+                  placeholder="YYYY-MM-DD"
                   class="form-control"
                   [(ngModel)]="user.updatedAt"
                   [disabled]="!user.isEdit"
@@ -141,7 +144,7 @@
                   class="btn btn-success"
                   *ngIf="user.isEdit"
                   title="Save"
-                  (click)="toggleEdit(i)"
+                  (click)="saveUser(i)"
                 >
                   <fa-icon [icon]="faSave"></fa-icon>
                 </button>

@@ -27,20 +27,7 @@ export class UsersComponent implements OnInit {
   constructor(private userService: UserService) {}
 
   ngOnInit(): void {}
-  loadData(
-    loadDisabled: boolean = false,
-    singleUser: boolean = false,
-    index: number = 0
-  ): void {
-    if (loadDisabled && singleUser) {
-      let data = this.userService.getUsers();
-      console.log([...data]);
-
-      let copyUsers = [...this.users];
-      copyUsers[index] = data[index];
-      this.users = copyUsers;
-      return;
-    }
+  loadData(): void {
     this.loading = true;
     setTimeout(() => {
       let data = this.userService.getUsers();
@@ -53,10 +40,23 @@ export class UsersComponent implements OnInit {
   toggleEdit(index: number) {
     this.users[index].isEdit = !this.users[index].isEdit;
     if (!this.users[index].isEdit) {
-      this.loadData(true, true, index);
+      this.loadData();
     }
   }
   removeUser(index: number) {
     this.users.splice(index, 1);
+  }
+  saveUser(index: number) {
+    //check mandatory fiels
+    for (const field of this.mandatoryFields) {
+      let editedUser: any = this.users[index];
+      console.log(editedUser);
+
+      if (!editedUser[field]) {
+        alert(`${field} is mandatory field`);
+        return;
+      }
+    }
+    this.users[index].isEdit = false;
   }
 }

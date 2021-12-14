@@ -13,3 +13,9 @@
   border: none;
   background: transparent;
 }
+.select-box {
+  min-width: 200px;
+}
+.form-control {
+  min-width: 200px;
+}
