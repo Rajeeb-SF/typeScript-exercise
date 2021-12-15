@@ -7,12 +7,15 @@ import {
   faTimes,
   faSave,
 } from '@fortawesome/free-solid-svg-icons';
+import { UserGenericService } from '../generic-user-crud/user-generic.service';
+import { DateFormatter } from '../decorators/date-time-formatter';
 
 @Component({
   selector: 'app-users',
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.css'],
 })
+// @DateFormatter('12/05/1998')
 export class UsersComponent implements OnInit {
   loading: boolean = false;
   users: Array<User> = [];
@@ -24,7 +27,10 @@ export class UsersComponent implements OnInit {
   mandatoryFields: Array<string> = ['firstName', 'email', 'role'];
   public usertypeToLabelMapping = usertypeToLabelMapping;
   public userTypes = Object.values(userTypes);
-  constructor(private userService: UserService) {}
+  constructor(
+    private userService: UserService,
+    private userCrudService: UserGenericService
+  ) {}
 
   ngOnInit(): void {}
   loadData(): void {
@@ -58,5 +64,12 @@ export class UsersComponent implements OnInit {
       }
     }
     this.users[index].isEdit = false;
+  }
+  createUser() {
+    this.userCrudService
+      .create({ firstName: 'Rajeeb', middleName: 'haha', lastName: 'A' })
+      .subscribe((data) => {
+        console.log(data);
+      });
   }
 }

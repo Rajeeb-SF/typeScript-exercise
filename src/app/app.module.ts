@@ -7,10 +7,17 @@ import { AppComponent } from './app.component';
 import { UsersComponent } from './users/users.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [AppComponent, UsersComponent, LoaderComponent],
-  imports: [BrowserModule, AppRoutingModule, FontAwesomeModule, FormsModule],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    FontAwesomeModule,
+    FormsModule,
+    HttpClientModule,
+  ],
   providers: [],
   bootstrap: [AppComponent],
 })
