@@ -24,13 +24,13 @@ export abstract class ResourceService<T extends ResourceModel<T>> {
       .get<T>(`${this.apiUrl}/${id}`)
       .pipe(map((result) => result));
   }
-  public update(resource: Partial<T> & { toJson: () => T }): Observable<T> {
+  public update(resource: Partial<T>): Observable<T> {
     return this.httpClient
-      .put<T>(`${this.apiUrl}/${resource.id}`, resource.toJson())
+      .put<T>(`${this.apiUrl}/${resource.id}`, resource)
       .pipe(map((result) => result));
   }
 
-  public delete(id: number): Observable<void> {
+  public delete(id: number | undefined): Observable<void> {
     return this.httpClient.delete<void>(`${this.apiUrl}/${id}`);
   }
 }

@@ -9,7 +9,9 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { UserGenericService } from '../generic-user-crud/user-generic.service';
 import { DateFormatter } from '../decorators/date-time-formatter';
-
+import { UserModel } from '../model/user.model';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+declare var $: any;
 @Component({
   selector: 'app-users',
   templateUrl: './users.component.html',
@@ -18,30 +20,50 @@ import { DateFormatter } from '../decorators/date-time-formatter';
 // @DateFormatter('12/05/1998')
 export class UsersComponent implements OnInit {
   loading: boolean = false;
-  users: Array<User> = [];
+  users: Array<UserModel> = [];
   faTrash = faTrash;
   faEdit = faEdit;
   faTimes = faTimes;
   faSave = faSave;
-  formValues: Array<User> = [];
   mandatoryFields: Array<string> = ['firstName', 'email', 'role'];
   public usertypeToLabelMapping = usertypeToLabelMapping;
   public userTypes = Object.values(userTypes);
+  formModalTitle: string = 'Create new user';
+  userForm!: FormGroup;
+  submitted: boolean = false;
   constructor(
     private userService: UserService,
-    private userCrudService: UserGenericService
+    private userCrudService: UserGenericService,
+    private formBuilder: FormBuilder
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.userForm = this.formBuilder.group({
+      firstName: ['', Validators.required],
+      middleName: [''],
+      lastName: [''],
+      email: ['', [Validators.required, Validators.email]],
+      role: ['', Validators.required],
+      address: [''],
+      phoneNumber: [''],
+    });
+  }
+  get f() {
+    return this.userForm.controls;
+  }
   loadData(): void {
     this.loading = true;
-    setTimeout(() => {
-      let data = this.userService.getUsers();
+    this.userCrudService.get().subscribe((data) => {
+      if (!data.length) {
+        $('#informModal').modal('show');
+      }
+      for (const item of data) {
+        item.isEdit = false;
+      }
       this.users = [...data];
-      this.formValues = [...data];
-      console.log(this.users);
       this.loading = false;
-    }, 500);
+      console.log(this.users);
+    });
   }
   toggleEdit(index: number) {
     this.users[index].isEdit = !this.users[index].isEdit;
@@ -50,26 +72,32 @@ export class UsersComponent implements OnInit {
     }
   }
   removeUser(index: number) {
-    this.users.splice(index, 1);
+    this.userCrudService.delete(this.users[index].id).subscribe((data) => {
+      this.loadData();
+    });
   }
-  saveUser(index: number) {
+  updateUser(index: number) {
     //check mandatory fiels
     for (const field of this.mandatoryFields) {
       let editedUser: any = this.users[index];
-      console.log(editedUser);
-
       if (!editedUser[field]) {
         alert(`${field} is mandatory field`);
         return;
       }
     }
-    this.users[index].isEdit = false;
+    this.userCrudService.update(this.users[index]).subscribe((data) => {
+      this.loadData();
+    });
   }
-  createUser() {
-    this.userCrudService
-      .create({ firstName: 'Rajeeb', middleName: 'haha', lastName: 'A' })
-      .subscribe((data) => {
-        console.log(data);
-      });
+  onSubmit(): void {
+    this.submitted = true;
+    console.log(this.userForm.value);
+    this.userCrudService.create(this.userForm.value).subscribe((data) => {
+      $('#formModal').modal('hide');
+    });
+  }
+  onCancel(): void {
+    this.userForm.reset();
+    this.submitted = false;
   }
 }
